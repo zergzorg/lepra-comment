@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Leprosorium User Comment Toggle with Persistence
 // @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  Добавляет компактную кнопку для сворачивания/разворачивания комментариев пользователя с сохранением состояния на страницах постов leprosorium.ru
+// @version      0.2
+// @description  Добавляет компактную надпись для сворачивания/разворачивания комментариев пользователя с сохранением состояния на страницах постов leprosorium.ru
 // @author       zergzorg with ChatGpt 4o
 // @match        *://*.leprosorium.ru/comments/*
 // @grant        none
@@ -10,6 +10,9 @@
 
 (function() {
     'use strict';
+
+    // Настраиваемый цвет текста для ссылки "свернуть/развернуть"
+    const toggleTextColor = '#007bff'; // Измените цвет по вашему желанию
 
     // Проверяем, что скрипт запущен только на страницах постов (URL должен содержать "comments/")
     if (!window.location.href.includes('/comments/')) {
@@ -28,7 +31,7 @@
     }
 
     // Функция для сворачивания/разворачивания комментариев пользователя
-    function toggleUserComments(userId, button) {
+    function toggleUserComments(userId, toggleLink) {
         const hiddenComments = getHiddenComments();
         const comments = document.querySelectorAll(`.comment[data-user_id="${userId}"]`);
         let isHidden = false;
@@ -41,13 +44,13 @@
             }
         });
 
-        // Обновляем состояние комментариев и текст кнопки
+        // Обновляем состояние комментариев и текст ссылки
         if (isHidden) {
             hiddenComments[userId] = true;
-            button.textContent = 'развернуть';
+            toggleLink.textContent = 'развернуть';
         } else {
             delete hiddenComments[userId];
-            button.textContent = 'свернуть';
+            toggleLink.textContent = 'свернуть';
         }
 
         // Сохраняем изменения в localStorage
@@ -69,30 +72,30 @@
         });
     }
 
-    // Добавляем кнопку рядом с именем пользователя
-    function addToggleButtons() {
+    // Добавляем ссылку для сворачивания/разворачивания рядом с именем пользователя
+    function addToggleLinks() {
         const hiddenComments = getHiddenComments();
         const userLinks = document.querySelectorAll('.c_user');
 
         userLinks.forEach(link => {
             const userId = link.getAttribute('data-user_id');
-            const button = document.createElement('button');
-            button.textContent = hiddenComments[userId] ? 'развернуть' : 'свернуть';
-            button.style.marginLeft = '5px';
-            button.style.cursor = 'pointer';
-            button.style.padding = '2px 5px';
-            button.style.fontSize = '10px';
+            const toggleLink = document.createElement('span');
+            toggleLink.textContent = hiddenComments[userId] ? 'развернуть' : 'свернуть';
+            toggleLink.style.marginLeft = '5px';
+            toggleLink.style.cursor = 'pointer';
+            toggleLink.style.color = toggleTextColor;
+            toggleLink.style.fontSize = '10px';
 
-            button.addEventListener('click', (e) => {
+            toggleLink.addEventListener('click', (e) => {
                 e.preventDefault();
-                toggleUserComments(userId, button);
+                toggleUserComments(userId, toggleLink);
             });
 
-            link.parentNode.insertBefore(button, link.nextSibling);
+            link.parentNode.insertBefore(toggleLink, link.nextSibling);
         });
     }
 
-    // Восстанавливаем состояние комментариев и добавляем кнопки
+    // Восстанавливаем состояние комментариев и добавляем ссылки
     restoreCommentStates();
-    addToggleButtons();
+    addToggleLinks();
 })();

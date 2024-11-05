@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Leprosorium User Comment Toggle with Persistence
 // @namespace    http://tampermonkey.net/
-// @version      0.5
+// @version      0.1
 // @description  Добавляет компактную кнопку для сворачивания/разворачивания комментариев пользователя с сохранением состояния на страницах постов leprosorium.ru
-// @author       Ваше имя
+// @author       zergzorg with ChatGpt 4o
 // @match        *://*.leprosorium.ru/comments/*
 // @grant        none
 // ==/UserScript==

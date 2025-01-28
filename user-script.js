@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      0.2
 // @description  Добавляет компактную надпись для сворачивания/разворачивания комментариев пользователя с сохранением состояния на страницах постов leprosorium.ru
-// @author       zergzorg with ChatGpt 4o
+// @author       zergzorg
 // @match        *://*.leprosorium.ru/comments/*
 // @grant        none
 // ==/UserScript==
